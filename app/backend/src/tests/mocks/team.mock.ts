@@ -1,4 +1,4 @@
-import ITeam from "../../Interfaces/teams/ITeam";
+import ITeam from '../../Interfaces/teams/ITeam';
 
 const teamList: ITeam[] = [
   { id: 1, teamName: 'a' },
