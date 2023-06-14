@@ -15,6 +15,16 @@ class TeamModel implements ITeamModel {
 
     return teams;
   };
+
+  public findById = async (id: number): Promise<ITeam | null> => {
+    const sequelizeTeam = await this.model.findByPk(id);
+    if (!sequelizeTeam) return null;
+
+    return {
+      id: sequelizeTeam.id,
+      teamName: sequelizeTeam.teamName,
+    };
+  };
 }
 
 export default TeamModel;
