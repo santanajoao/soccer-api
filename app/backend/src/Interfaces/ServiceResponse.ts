@@ -1,4 +1,4 @@
-type ErrorStatuses = 'NOT_FOUND' | 'UNAUTHORIZED' | 'INTERNAL_SERVER_ERROR';
+export type ErrorStatus = 'NOT_FOUND' | 'UNAUTHORIZED' | 'INVALID_VALUE';
 
 type SuccessResponse<T> = {
   status: 'SUCCESS';
@@ -10,7 +10,7 @@ type ErrorMessageObject = {
 };
 
 type ErrorResponse = {
-  status: ErrorStatuses;
+  status: ErrorStatus;
   data: ErrorMessageObject;
 };
 
