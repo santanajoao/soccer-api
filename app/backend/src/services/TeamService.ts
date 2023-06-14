@@ -15,6 +15,14 @@ class TeamService implements ITeamService {
 
     return { status: 'SUCCESS', data: teams };
   };
+
+  public getById = async (id: number): Promise<ServiceResponse<ITeam>> => {
+    const team = await this.teamModel.findById(id);
+    if (!team) {
+      return { status: 'NOT_FOUND', data: { message: 'Team not found' } };
+    }
+    return { status: 'SUCCESS', data: team };
+  };
 }
 
 export default TeamService;
