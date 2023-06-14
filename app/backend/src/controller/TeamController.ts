@@ -4,7 +4,7 @@ import HTTP from '../utils/HTTP';
 
 class TeamController {
   private teamService: ITeamService;
-  public statusMapper = HTTP;
+  private statusMapper = HTTP;
 
   constructor(teamService: ITeamService) {
     this.teamService = teamService;
