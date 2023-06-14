@@ -1,7 +1,8 @@
+import ITeamModel from '../Interfaces/teams/ITeamModel';
 import ITeam from '../Interfaces/teams/ITeam';
 import SequelizeTeam from '../database/models/SequelizeTeam';
 
-class TeamModel {
+class TeamModel implements ITeamModel {
   private model = SequelizeTeam;
 
   public findAll = async (): Promise<ITeam[]> => {
