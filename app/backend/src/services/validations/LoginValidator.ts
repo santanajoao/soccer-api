@@ -1,5 +1,5 @@
 import IEncrypter from '../../Interfaces/IEncrypter';
-import ServiceResponse from '../../Interfaces/ServiceResponse';
+import ServiceResponse from '../../Interfaces/TServiceResponse';
 import IUser from '../../Interfaces/users/IUser';
 import ILoginValidator from '../../Interfaces/login/ILoginValidator';
 import IUserModel from '../../Interfaces/users/IUserModel';

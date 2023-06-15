@@ -1,4 +1,4 @@
-import { ErrorStatus } from '../Interfaces/ServiceResponse';
+import { ErrorStatus } from '../Interfaces/TServiceResponse';
 
 class HTTP {
   public static mapStatus = (status: ErrorStatus): number => {

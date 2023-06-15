@@ -1,7 +1,7 @@
 import IPublicUser from '../Interfaces/users/IPublicUser';
-import ITokenManager from '../Interfaces/ITokenManager';
-import ServiceResponse from '../Interfaces/ServiceResponse';
-import Token from '../Interfaces/Token';
+import ITokenManager from '../Interfaces/tokens/ITokenManager';
+import ServiceResponse from '../Interfaces/TServiceResponse';
+import Token from '../Interfaces/tokens/TToken';
 import ILoginService from '../Interfaces/login/ILoginService';
 import ILoginValidator from '../Interfaces/login/ILoginValidator';
 

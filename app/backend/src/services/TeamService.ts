@@ -1,4 +1,4 @@
-import ServiceResponse from '../Interfaces/ServiceResponse';
+import ServiceResponse from '../Interfaces/TServiceResponse';
 import ITeamService from '../Interfaces/teams/ITeamService';
 import ITeamModel from '../Interfaces/teams/ITeamModel';
 import ITeam from '../Interfaces/teams/ITeam';
