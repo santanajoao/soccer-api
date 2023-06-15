@@ -19,6 +19,23 @@ describe('Login integration tests', function() {
   beforeEach(sinon.restore)
 
   describe('POST /login', function() {
+    it('should return a token if email and password are valid', async function () {
+      sinon.stub(SequelizeUser, 'findOne').resolves(userMock.userWithExtraProps as any);
+      sinon.stub(jwt, 'sign').returns('token' as any);
+      sinon.stub(bcrypt, 'compareSync').returns(true);
+
+      const { status, body } = await chai
+        .request(app)
+        .post('/login/')
+        .send({
+          email: userMock.validEmail,
+          password: userMock.validPassword,
+        });
+
+      expect(status).to.be.equal(200);
+      expect(body).to.be.deep.equal({ token: 'token' });
+    });
+
     it('should return bad request if email was not sent', async function() {
       const { status, body } = await chai
         .request(app)
@@ -69,7 +86,7 @@ describe('Login integration tests', function() {
       expect(body).to.be.deep.equal({ message: 'Invalid email or password' });
     });
 
-    it ('sould return unauthorized if email doesn\'t exists', async function () {
+    it ('sould return unauthorized if email doesn\'t exists', async function() {
       sinon.stub(SequelizeUser, 'findOne').resolves(undefined);
 
       const { status, body } = await chai
@@ -84,7 +101,7 @@ describe('Login integration tests', function() {
       expect(body).to.be.deep.equal({ message: 'Invalid email or password' });
     });
 
-    it ('sould return unauthorized if password is wrong', async function () {
+    it ('sould return unauthorized if password is wrong', async function() {
       sinon.stub(SequelizeUser, 'findOne')
         .resolves(userMock.userWithExtraProps as any);
       sinon.stub(bcrypt, 'compareSync').returns(false);
@@ -99,6 +116,43 @@ describe('Login integration tests', function() {
       
       expect(status).to.be.equal(401);
       expect(body).to.be.deep.equal({ message: 'Invalid email or password' });
+    });
+  });
+
+  describe('GET /login/role', function() {
+    it('should return unauthorized if a token was not sent in headers', async function() {
+      const { status, body } = await chai
+        .request(app)
+        .get('/login/role')
+      
+      expect(status).to.be.equal(401);
+      expect(body).to.be.deep.equal({ message: 'Token not found' });
+    });
+
+    it('should return unauthorized if the token is invalid', async function() {
+      sinon.stub(SequelizeUser, 'findOne').resolves(userMock.userWithExtraProps as any);
+      sinon.stub(jwt, 'verify').throws();
+
+      const { status, body } = await chai
+        .request(app)
+        .get('/login/role')
+        .set('Authorization', 'invalid token');
+
+      expect(status).to.be.equal(401);
+      expect(body).to.be.deep.equal({ message: 'Token must be a valid token' });
+    });
+
+    it('should return the user role if the token is valid', async function() {
+      sinon.stub(SequelizeUser, 'findOne').resolves(userMock.userWithExtraProps as any);
+      sinon.stub(jwt, 'verify').returns(userMock.user as any);
+
+      const { status, body } = await chai
+        .request(app)
+        .get('/login/role')
+        .set('Authorization', 'valid token');
+
+      expect(status).to.be.equal(200);
+      expect(body).to.be.deep.equal({ role: userMock.user.role });
     });
   });
 });
