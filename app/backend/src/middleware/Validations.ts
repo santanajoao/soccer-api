@@ -9,7 +9,7 @@ class Validations {
     this.tokenManager = tokenManager;
   }
 
-  public static validateLogin = (req: Request, res: Response, next: NextFunction) => {
+  public validateLogin = (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
     if (!email || !password) {
       return res.status(400).json({ message: 'All fields must be filled' });
@@ -29,8 +29,7 @@ class Validations {
       return res.status(401).json({ message: 'Token must be a valid token' });
     }
 
-    console.log(tokenValidation.data);
-
+    req.body.internals = { token: { data: tokenValidation.data } };
     next();
   };
 }
