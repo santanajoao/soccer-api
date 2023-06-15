@@ -18,6 +18,15 @@ class LoginController {
     }
     res.status(200).json(data);
   };
+
+  public handleGetRole = async (req: Request, res: Response) => {
+    const tokenData = req.body.internals.token.data;
+    const { status, data } = await this.loginService.getRoleByEmail(tokenData.email);
+    if (status !== 'SUCCESS') {
+      return res.status(this.statusMapper.mapStatus(status)).json(data);
+    }
+    res.status(200).json(data);
+  };
 }
 
 export default LoginController;

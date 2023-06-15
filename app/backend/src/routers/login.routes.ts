@@ -18,6 +18,9 @@ const tokenManager = new JWT();
 const loginService = new LoginService(loginValidator, tokenManager);
 const loginController = new LoginController(loginService);
 
-router.post('/', Validations.validateLogin, loginController.handlePostLogin);
+const middlewares = new Validations(tokenManager);
+
+router.post('/', middlewares.validateLogin, loginController.handlePostLogin);
+router.post('/role', middlewares.validateToken, loginController.handleGetRole);
 
 export default router;
