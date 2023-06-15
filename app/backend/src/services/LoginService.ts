@@ -29,6 +29,14 @@ class LoginService implements ILoginService {
     const token = this.tokenManager.generate(tokenPayload);
     return { status: 'SUCCESS', data: { token } };
   };
+
+  public getRoleByEmail = async (email: string): Promise<ServiceResponse<{ role: string; }>> => {
+    const existanceValidation = await this.validator.emailExists(email);
+    if (existanceValidation.status !== 'SUCCESS') return existanceValidation;
+
+    const { role } = existanceValidation.data;
+    return { status: 'SUCCESS', data: { role } };
+  };
 }
 
 export default LoginService;
