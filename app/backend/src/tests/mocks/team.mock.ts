@@ -8,7 +8,12 @@ const teamList: ITeam[] = [
 const teamListWithExtraProps = teamList
   .map((team: ITeam) => ({ ...team, extra: null }));
 
+const team = teamList[0];
+const teamWithExtraProps = teamListWithExtraProps[0];
+
 export default {
   teamList,
   teamListWithExtraProps,
+  team,
+  teamWithExtraProps,
 };
