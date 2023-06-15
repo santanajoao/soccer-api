@@ -1,4 +1,4 @@
-import ServiceResponse from '../ServiceResponse';
+import ServiceResponse from '../TServiceResponse';
 import ITeam from './ITeam';
 
 export default interface ITeamService {

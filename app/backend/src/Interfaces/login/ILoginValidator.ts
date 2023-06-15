@@ -1,4 +1,4 @@
-import ServiceResponse from '../ServiceResponse';
+import ServiceResponse from '../TServiceResponse';
 import IUser from '../users/IUser';
 
 export default interface ILoginValidator {
