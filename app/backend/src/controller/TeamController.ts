@@ -10,8 +10,20 @@ class TeamController {
     this.teamService = teamService;
   }
 
-  public handleGetTeams = async (req: Request, res: Response) => {
+  public handleGetTeams = async (_req: Request, res: Response) => {
     const { status, data } = await this.teamService.getAll();
+
+    if (status !== 'SUCCESS') {
+      return res
+        .status(this.statusMapper.mapStatus(status))
+        .json(data);
+    }
+    res.status(200).json(data);
+  };
+
+  public handleGetTeamById = async (req: Request, res: Response) => {
+    const id = Number(req.params.id);
+    const { status, data } = await this.teamService.getById(id);
 
     if (status !== 'SUCCESS') {
       return res
