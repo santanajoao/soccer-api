@@ -21,6 +21,6 @@ const loginController = new LoginController(loginService);
 const middlewares = new Validations(tokenManager);
 
 router.post('/', middlewares.validateLogin, loginController.handlePostLogin);
-router.post('/role', middlewares.validateToken, loginController.handleGetRole);
+router.get('/role', middlewares.validateToken, loginController.handleGetRole);
 
 export default router;
