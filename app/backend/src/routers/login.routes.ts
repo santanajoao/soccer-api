@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import Validations from '../middleware/Validations';
 import JWT from '../auth/JWT';
 import LoginController from '../controller/LoginController';
 import LoginService from '../services/LoginService';
@@ -17,6 +18,6 @@ const tokenManager = new JWT();
 const loginService = new LoginService(loginValidator, tokenManager);
 const loginController = new LoginController(loginService);
 
-router.post('/', loginController.handlePostLogin);
+router.post('/', Validations.validateLogin, loginController.handlePostLogin);
 
 export default router;
