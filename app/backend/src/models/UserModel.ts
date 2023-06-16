@@ -12,13 +12,7 @@ class UserModel implements IUserModel {
 
     if (!sequelizeUser) return null;
 
-    return {
-      id: sequelizeUser.id,
-      email: sequelizeUser.email,
-      password: sequelizeUser.password,
-      role: sequelizeUser.role,
-      username: sequelizeUser.username,
-    };
+    return sequelizeUser.dataValues;
   };
 }
 

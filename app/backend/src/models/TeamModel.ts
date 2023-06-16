@@ -8,11 +8,7 @@ class TeamModel implements ITeamModel {
   public findAll = async (): Promise<ITeam[]> => {
     const sequelizeTeams = await this.model.findAll();
 
-    const teams: ITeam[] = sequelizeTeams.map((team) => ({
-      id: team.id,
-      teamName: team.teamName,
-    }));
-
+    const teams: ITeam[] = sequelizeTeams.map((team) => team.dataValues);
     return teams;
   };
 
@@ -20,10 +16,7 @@ class TeamModel implements ITeamModel {
     const sequelizeTeam = await this.model.findByPk(id);
     if (!sequelizeTeam) return null;
 
-    return {
-      id: sequelizeTeam.id,
-      teamName: sequelizeTeam.teamName,
-    };
+    return sequelizeTeam.dataValues;
   };
 }
 
