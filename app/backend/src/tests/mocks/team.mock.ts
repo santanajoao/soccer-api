@@ -8,7 +8,7 @@ const teamList: ITeam[] = [
 const sequelizeTeamList = teamList.map((team) => ({ dataValues: team }));
 
 const team = teamList[0];
-const sequelizeTeam = { dataValues: team };
+const sequelizeTeam = sequelizeTeamList[0];
 
 export default {
   teamList,
