@@ -18,14 +18,13 @@ const user: IUser = {
   username: 'test',
 };
 
-const userWithExtraProps = {
-  ...user,
-  extra: null,
+const sequelizeUser = {
+  dataValues: user,
 };
 
 export default {
   user,
-  userWithExtraProps,
+  sequelizeUser,
   validEmail,
   validPassword,
   invalidEmail,

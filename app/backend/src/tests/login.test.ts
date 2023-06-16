@@ -20,7 +20,7 @@ describe('Login integration tests', function() {
 
   describe('POST /login', function() {
     it('should return a token if email and password are valid', async function () {
-      sinon.stub(SequelizeUser, 'findOne').resolves(userMock.userWithExtraProps as any);
+      sinon.stub(SequelizeUser, 'findOne').resolves(userMock.sequelizeUser as any);
       sinon.stub(jwt, 'sign').returns('token' as any);
       sinon.stub(bcrypt, 'compareSync').returns(true);
 
@@ -103,7 +103,7 @@ describe('Login integration tests', function() {
 
     it ('sould return unauthorized if password is wrong', async function() {
       sinon.stub(SequelizeUser, 'findOne')
-        .resolves(userMock.userWithExtraProps as any);
+        .resolves(userMock.sequelizeUser as any);
       sinon.stub(bcrypt, 'compareSync').returns(false);
 
       const { status, body } = await chai
@@ -130,7 +130,7 @@ describe('Login integration tests', function() {
     });
 
     it('should return unauthorized if the token is invalid', async function() {
-      sinon.stub(SequelizeUser, 'findOne').resolves(userMock.userWithExtraProps as any);
+      sinon.stub(SequelizeUser, 'findOne').resolves(userMock.sequelizeUser as any);
       sinon.stub(jwt, 'verify').throws();
 
       const { status, body } = await chai
@@ -143,7 +143,7 @@ describe('Login integration tests', function() {
     });
 
     it('should return the user role if the token is valid', async function() {
-      sinon.stub(SequelizeUser, 'findOne').resolves(userMock.userWithExtraProps as any);
+      sinon.stub(SequelizeUser, 'findOne').resolves(userMock.sequelizeUser as any);
       sinon.stub(jwt, 'verify').returns(userMock.user as any);
 
       const { status, body } = await chai

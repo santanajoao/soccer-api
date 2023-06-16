@@ -5,15 +5,14 @@ const teamList: ITeam[] = [
   { id: 2, teamName: 'b' },
 ];
 
-const teamListWithExtraProps = teamList
-  .map((team: ITeam) => ({ ...team, extra: null }));
+const sequelizeTeamList = teamList.map((team) => ({ dataValues: team }));
 
 const team = teamList[0];
-const teamWithExtraProps = teamListWithExtraProps[0];
+const sequelizeTeam = { dataValues: team };
 
 export default {
   teamList,
-  teamListWithExtraProps,
+  sequelizeTeamList,
   team,
-  teamWithExtraProps,
+  sequelizeTeam,
 };

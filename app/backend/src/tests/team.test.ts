@@ -20,7 +20,7 @@ describe('Team integration tests', function() {
   describe('GET /teams', function() {
     it('should return the team list', async function() {
       sinon.stub(SequelizeTeam, 'findAll')
-        .resolves(teamMock.teamListWithExtraProps as any);
+        .resolves(teamMock.sequelizeTeamList as any);
 
       const { status, body } = await chai.request(app).get('/teams');
       
@@ -32,7 +32,7 @@ describe('Team integration tests', function() {
   describe('GET /teams/:id', function() {
     it('should return the team case id is valid', async function() {
       sinon.stub(SequelizeTeam, 'findByPk')
-        .resolves(teamMock.teamWithExtraProps as any);
+        .resolves(teamMock.sequelizeTeam as any);
 
       const { status, body } = await chai.request(app).get('/teams/id');
       
