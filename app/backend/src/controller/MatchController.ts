@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import IMatchService from '../Interfaces/matches/IMatchService';
 import HTTP from '../utils/HTTP';
+import Parser from '../utils/Parser';
 
 class MatchController {
   private matchService: IMatchService;
@@ -10,8 +11,11 @@ class MatchController {
     this.matchService = matchService;
   }
 
-  public handleGetMatches = async (_req: Request, res: Response) => {
-    const { status, data } = await this.matchService.getAll();
+  public handleGetMatches = async (req: Request, res: Response) => {
+    const { inProgress } = req.query;
+    const booleanInProgress = Parser.parseBoolean(inProgress as string);
+
+    const { status, data } = await this.matchService.getMatches(booleanInProgress);
 
     if (status !== 'SUCCESS') {
       return res
