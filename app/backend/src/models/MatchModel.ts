@@ -1,12 +1,12 @@
 import IMatchModel from '../Interfaces/matches/IMatchModel';
-import IMatch, { TMatchWithTeamNames, TUpdateMatchGoals } from '../Interfaces/matches/IMatch';
+import IMatch, { TMatchWithTeamNames, TMatchParams } from '../Interfaces/matches/IMatch';
 import SequelizeMatch from '../database/models/SequelizeMatch';
 import SequelizeTeam from '../database/models/SequelizeTeam';
 
 class MatchModel implements IMatchModel {
   private model = SequelizeMatch;
 
-  public findMatches = async (inProgress?: boolean): Promise<TMatchWithTeamNames[]> => {
+  public findAll = async (inProgress?: boolean): Promise<TMatchWithTeamNames[]> => {
     const where = inProgress === undefined ? {} : { inProgress };
     const sequelizeMatches = await this.model.findAll({
       where,
@@ -22,11 +22,11 @@ class MatchModel implements IMatchModel {
     return matches;
   };
 
-  public updateGoals = async (
-    { id, homeTeamGoals, awayTeamGoals }: TUpdateMatchGoals,
+  public updateById = async (
+    { id, homeTeamGoals, awayTeamGoals, inProgress }: TMatchParams,
   ): Promise<IMatch | null> => {
     await this.model.update(
-      { homeTeamGoals, awayTeamGoals },
+      { homeTeamGoals, awayTeamGoals, inProgress },
       { where: { id } },
     );
 

@@ -1,6 +1,6 @@
-import IMatch, { TMatchWithTeamNames, TUpdateMatchGoals } from './IMatch';
+import IMatch, { TMatchWithTeamNames, TMatchParams } from './IMatch';
 
 export default interface IMatchModel {
-  findMatches(inProgress?: boolean): Promise<TMatchWithTeamNames[]>;
-  updateGoals(props: TUpdateMatchGoals): Promise<IMatch | null>;
+  findAll(inProgress?: boolean): Promise<TMatchWithTeamNames[]>;
+  updateById(props: TMatchParams): Promise<IMatch | null>;
 }
