@@ -2,6 +2,7 @@ import ServiceResponse from '../Interfaces/TServiceResponse';
 import IMatchService, { TUpdateGoals } from '../Interfaces/matches/IMatchService';
 import IMatchModel from '../Interfaces/matches/IMatchModel';
 import IMatch, { TMatchParams, TMatchWithTeamNames } from '../Interfaces/matches/IMatch';
+import DataHandler from '../utils/DataHandler';
 
 class MatchService implements IMatchService {
   private matchModel: IMatchModel;
@@ -11,9 +12,11 @@ class MatchService implements IMatchService {
   }
 
   public getMatches = async (
-    { inProgress }: TMatchParams,
+    where: TMatchParams,
   ): Promise<ServiceResponse<TMatchWithTeamNames[]>> => {
-    const matches = await this.matchModel.findAll(inProgress);
+    const tratedWhere = DataHandler.removeObjectUndefined(where);
+
+    const matches = await this.matchModel.findAll(tratedWhere);
 
     return { status: 'SUCCESS', data: matches };
   };

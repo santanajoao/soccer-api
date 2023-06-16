@@ -6,8 +6,7 @@ import SequelizeTeam from '../database/models/SequelizeTeam';
 class MatchModel implements IMatchModel {
   private model = SequelizeMatch;
 
-  public findAll = async (inProgress?: boolean): Promise<TMatchWithTeamNames[]> => {
-    const where = inProgress === undefined ? {} : { inProgress };
+  public findAll = async (where: TMatchParams): Promise<TMatchWithTeamNames[]> => {
     const sequelizeMatches = await this.model.findAll({
       where,
       include: [
@@ -23,10 +22,11 @@ class MatchModel implements IMatchModel {
   };
 
   public updateById = async (
-    { id, homeTeamGoals, awayTeamGoals, inProgress }: TMatchParams,
+    fields: TMatchParams,
   ): Promise<IMatch | null> => {
+    const { id, ...newValues } = fields;
     await this.model.update(
-      { homeTeamGoals, awayTeamGoals, inProgress },
+      newValues,
       { where: { id } },
     );
 
