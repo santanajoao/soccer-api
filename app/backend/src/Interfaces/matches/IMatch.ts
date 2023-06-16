@@ -16,4 +16,4 @@ export type TMatchWithTeamNames = IMatch & {
   awayTeam: TTeamName;
 };
 
-export type TUpdateMatchGoals = Pick<IMatch, 'id' | 'homeTeamGoals' | 'awayTeamGoals'>;
+export type TMatchParams = Partial<IMatch>;

@@ -15,7 +15,8 @@ class MatchController {
     const { inProgress } = req.query;
     const booleanInProgress = Parser.parseBoolean(inProgress as string);
 
-    const { status, data } = await this.matchService.getMatches(booleanInProgress);
+    const { status, data } = await this.matchService
+      .getMatches({ inProgress: booleanInProgress });
 
     if (status !== 'SUCCESS') {
       return res
@@ -26,9 +27,13 @@ class MatchController {
   };
 
   public handlePatchMatches = async (req: Request, res: Response) => {
-    const props = { id: Number(req.params.id), ...req.body };
+    const fields = {
+      id: Number(req.params.id),
+      homeTeamGoals: Number(req.body.homeTeamGoals),
+      awayTeamGoals: Number(req.body.awayTeamGoals),
+    };
 
-    const { status, data } = await this.matchService.updateGoals(props);
+    const { status, data } = await this.matchService.updateGoals(fields);
 
     if (status !== 'SUCCESS') {
       return res
@@ -36,6 +41,18 @@ class MatchController {
         .json(data);
     }
     res.status(200).json(data);
+  };
+
+  public handlePatchFinishMatch = async (req: Request, res: Response) => {
+    const id = Number(req.params.id);
+    const { status, data } = await this.matchService.finishMatch(id);
+
+    if (status !== 'SUCCESS') {
+      return res
+        .status(this.statusMapper.mapStatus(status))
+        .json(data);
+    }
+    res.status(200).json({ message: 'Finished' });
   };
 }
 

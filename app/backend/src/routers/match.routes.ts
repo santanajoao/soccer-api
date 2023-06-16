@@ -18,6 +18,12 @@ const middlewares = new Validations(tokenManager);
 router.get('/', middlewares.validateInProgress, matchController.handleGetMatches);
 
 router.patch(
+  '/:id/finish',
+  middlewares.validateToken,
+  matchController.handlePatchFinishMatch,
+);
+
+router.patch(
   '/:id',
   middlewares.validateUpdateGoals,
   middlewares.validateToken,
