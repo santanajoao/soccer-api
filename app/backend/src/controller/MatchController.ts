@@ -24,6 +24,19 @@ class MatchController {
     }
     res.status(200).json(data);
   };
+
+  public handlePatchMatches = async (req: Request, res: Response) => {
+    const props = { id: Number(req.params.id), ...req.body };
+
+    const { status, data } = await this.matchService.updateGoals(props);
+
+    if (status !== 'SUCCESS') {
+      return res
+        .status(this.statusMapper.mapStatus(status))
+        .json(data);
+    }
+    res.status(200).json(data);
+  };
 }
 
 export default MatchController;

@@ -17,4 +17,11 @@ const middlewares = new Validations(tokenManager);
 
 router.get('/', middlewares.validateInProgress, matchController.handleGetMatches);
 
+router.patch(
+  '/:id',
+  middlewares.validateUpdateGoals,
+  middlewares.validateToken,
+  matchController.handlePatchMatches,
+);
+
 export default router;
