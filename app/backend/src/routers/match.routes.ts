@@ -30,6 +30,11 @@ router.patch(
   matchController.handlePatchMatches,
 );
 
-router.post('/', middlewares.validateToken, matchController.handlePostMatch);
+router.post(
+  '/',
+  middlewares.validateNewMatch,
+  middlewares.validateToken,
+  matchController.handlePostMatch,
+);
 
 export default router;

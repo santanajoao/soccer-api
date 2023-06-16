@@ -53,6 +53,19 @@ class Validations {
 
     next();
   };
+
+  public validateNewMatch = (req: Request, res: Response, next: NextFunction) => {
+    const requiredFields = [
+      'homeTeamGoals', 'awayTeamGoals', 'homeTeamId', 'awayTeamId', 'inProgress',
+    ];
+    const invalidField = requiredFields.find((field) => !(field in req.body));
+
+    if (invalidField) {
+      return res.status(400).json({ message: `${invalidField} is required` });
+    }
+
+    next();
+  };
 }
 
 export default Validations;
