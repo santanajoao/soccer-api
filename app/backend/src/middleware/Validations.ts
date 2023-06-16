@@ -56,7 +56,7 @@ class Validations {
 
   public validateNewMatch = (req: Request, res: Response, next: NextFunction) => {
     const requiredFields = [
-      'homeTeamGoals', 'awayTeamGoals', 'homeTeamId', 'awayTeamId', 'inProgress',
+      'homeTeamGoals', 'awayTeamGoals', 'homeTeamId', 'awayTeamId',
     ];
     const invalidField = requiredFields.find((field) => !(field in req.body));
 

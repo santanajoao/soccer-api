@@ -44,8 +44,13 @@ class MatchService implements IMatchService {
   };
 
   public createMatch = async (fields: IMatch): Promise<ServiceResponse<IMatch>> => {
-    const { id: _id, ...creationFields } = fields;
-    const match = await this.matchModel.create(creationFields);
+    const match = await this.matchModel.create({
+      homeTeamGoals: fields.homeTeamGoals,
+      homeTeamId: fields.homeTeamId,
+      awayTeamGoals: fields.awayTeamGoals,
+      awayTeamId: fields.awayTeamId,
+      inProgress: true,
+    });
 
     return { status: 'SUCCESS', data: match };
   };

@@ -43,7 +43,7 @@ class MatchModel implements IMatchModel {
   };
 
   public create = async (fields: TMatchCreation): Promise<IMatch> => {
-    const match = await this.model.create(fields);
+    const match = await this.model.create({ ...fields, inProgress: true });
 
     return match.dataValues;
   };
