@@ -32,6 +32,16 @@ class Validations {
     req.body.internals = { token: { data: tokenValidation.data } };
     next();
   };
+
+  public validateInProgress = (req: Request, res: Response, next: NextFunction) => {
+    const { inProgress } = req.query;
+
+    if (inProgress && inProgress !== 'true' && inProgress !== 'false') {
+      return res.status(422).json({ message: 'inProgress should be true or false' });
+    }
+
+    next();
+  };
 }
 
 export default Validations;
