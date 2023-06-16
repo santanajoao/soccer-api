@@ -15,6 +15,21 @@ class MatchService implements IMatchService {
 
     return { status: 'SUCCESS', data: matches };
   };
+
+  public getByProgress = async (
+    inProgress: boolean,
+  ): Promise<ServiceResponse<TMatchWithTeamNames[]>> => {
+    const matches = await this.matchModel.findByProgress(inProgress);
+
+    return { status: 'SUCCESS', data: matches };
+  };
+
+  public getMatches = async (inProgress?: boolean) => {
+    if (inProgress === undefined) {
+      return this.getAll();
+    }
+    return this.getByProgress(inProgress);
+  };
 }
 
 export default MatchService;
