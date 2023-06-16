@@ -1,7 +1,7 @@
 import ServiceResponse from '../Interfaces/TServiceResponse';
-import IMatchService from '../Interfaces/matches/IMatchService';
+import IMatchService, { TUpdateGoals } from '../Interfaces/matches/IMatchService';
 import IMatchModel from '../Interfaces/matches/IMatchModel';
-import IMatch, { TMatchWithTeamNames, TUpdateMatchGoals } from '../Interfaces/matches/IMatch';
+import IMatch, { TMatchParams, TMatchWithTeamNames } from '../Interfaces/matches/IMatch';
 
 class MatchService implements IMatchService {
   private matchModel: IMatchModel;
@@ -11,20 +11,32 @@ class MatchService implements IMatchService {
   }
 
   public getMatches = async (
-    inProgress?: boolean,
+    { inProgress }: TMatchParams,
   ): Promise<ServiceResponse<TMatchWithTeamNames[]>> => {
-    const matches = await this.matchModel.findMatches(inProgress);
+    const matches = await this.matchModel.findAll(inProgress);
 
     return { status: 'SUCCESS', data: matches };
   };
 
   public updateGoals = async (
-    props: TUpdateMatchGoals,
+    { id, homeTeamGoals, awayTeamGoals }: TUpdateGoals,
   ): Promise<ServiceResponse<IMatch>> => {
-    const updatedMatch = await this.matchModel.updateGoals(props);
+    const updatedMatch = await this.matchModel.updateById({
+      id, homeTeamGoals, awayTeamGoals,
+    });
+
     if (updatedMatch === null) {
       return { status: 'NOT_FOUND', data: { message: 'Match not found' } };
     }
+    return { status: 'SUCCESS', data: updatedMatch };
+  };
+
+  public finishMatch = async (id: number): Promise<ServiceResponse<IMatch>> => {
+    const updatedMatch = await this.matchModel.updateById({ id, inProgress: false });
+    if (!updatedMatch) {
+      return { status: 'NOT_FOUND', data: { message: 'Match not found' } };
+    }
+
     return { status: 'SUCCESS', data: updatedMatch };
   };
 }
