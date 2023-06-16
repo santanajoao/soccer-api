@@ -31,7 +31,9 @@ class MatchModel implements IMatchModel {
     );
 
     const updatedMatch = await this.model.findByPk(id);
-    return updatedMatch || null;
+
+    if (!updatedMatch) return null;
+    return updatedMatch;
   };
 }
 
