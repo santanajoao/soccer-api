@@ -7,6 +7,7 @@ import {
 } from 'sequelize';
 import db from '.';
 import IMatch from '../../Interfaces/matches/IMatch';
+import SequelizeTeam from './SequelizeTeam';
 
 class SequelizeMatch extends Model<InferAttributes<SequelizeMatch>,
 InferCreationAttributes<SequelizeMatch>> implements IMatch {
@@ -51,5 +52,11 @@ SequelizeMatch.init({
   timestamps: false,
   underscored: true,
 });
+
+SequelizeMatch.belongsTo(SequelizeTeam, { foreignKey: 'homeTeamId', as: 'homeTeam' });
+SequelizeTeam.hasMany(SequelizeMatch, { foreignKey: 'homeTeamId', as: 'homeTeam' });
+
+SequelizeMatch.belongsTo(SequelizeTeam, { foreignKey: 'awayTeamId', as: 'awayTeam' });
+SequelizeTeam.hasMany(SequelizeMatch, { foreignKey: 'awayTeamId', as: 'awayTeam' });
 
 export default SequelizeMatch;
