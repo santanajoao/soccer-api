@@ -6,3 +6,12 @@ export default interface IMatch {
   awayTeamGoals: number;
   inProgress: boolean;
 }
+
+type TTeamName = {
+  teamName: string;
+};
+
+export type TMatchWithTeamNames = IMatch & {
+  homeTeam: TTeamName;
+  awayTeam: TTeamName;
+};

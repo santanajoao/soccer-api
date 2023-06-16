@@ -1,16 +1,7 @@
 import IMatchModel from '../Interfaces/matches/IMatchModel';
-import IMatch from '../Interfaces/matches/IMatch';
+import { TMatchWithTeamNames } from '../Interfaces/matches/IMatch';
 import SequelizeMatch from '../database/models/SequelizeMatch';
 import SequelizeTeam from '../database/models/SequelizeTeam';
-
-type TTeamName = {
-  teamName: string;
-};
-
-type TMatchWithTeamNames = IMatch & {
-  homeTeam: TTeamName;
-  awayTeam: TTeamName;
-};
 
 class MatchModel implements IMatchModel {
   private model = SequelizeMatch;
