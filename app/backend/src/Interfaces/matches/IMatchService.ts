@@ -5,6 +5,7 @@ export default interface IMatchService {
   getMatches(where: TMatchParams): Promise<ServiceResponse<TMatchWithTeamNames[]>>;
   updateGoals(fields: TMatchParams): Promise<ServiceResponse<IMatch>>;
   finishMatch(id: number): Promise<ServiceResponse<IMatch>>;
+  createMatch(fields: IMatch): Promise<ServiceResponse<IMatch>>;
 }
 
 export type TUpdateGoals = Pick<IMatch, 'id' | 'homeTeamGoals' | 'awayTeamGoals'>;

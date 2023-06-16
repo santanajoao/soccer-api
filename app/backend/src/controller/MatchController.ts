@@ -54,6 +54,17 @@ class MatchController {
     }
     res.status(200).json({ message: 'Finished' });
   };
+
+  public handlePostMatch = async (req: Request, res: Response) => {
+    const { status, data } = await this.matchService.createMatch(req.body);
+
+    if (status !== 'SUCCESS') {
+      return res
+        .status(this.statusMapper.mapStatus(status))
+        .json(data);
+    }
+    res.status(201).json(data);
+  };
 }
 
 export default MatchController;

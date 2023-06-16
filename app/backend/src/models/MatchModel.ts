@@ -1,5 +1,11 @@
 import IMatchModel from '../Interfaces/matches/IMatchModel';
-import IMatch, { TMatchWithTeamNames, TMatchParams } from '../Interfaces/matches/IMatch';
+
+import IMatch, {
+  TMatchWithTeamNames,
+  TMatchParams,
+  TMatchCreation,
+} from '../Interfaces/matches/IMatch';
+
 import SequelizeMatch from '../database/models/SequelizeMatch';
 import SequelizeTeam from '../database/models/SequelizeTeam';
 
@@ -34,6 +40,12 @@ class MatchModel implements IMatchModel {
 
     if (!updatedMatch) return null;
     return updatedMatch.dataValues;
+  };
+
+  public create = async (fields: TMatchCreation): Promise<IMatch> => {
+    const match = await this.model.create(fields);
+
+    return match.dataValues;
   };
 }
 

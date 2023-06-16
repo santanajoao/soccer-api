@@ -17,3 +17,4 @@ export type TMatchWithTeamNames = IMatch & {
 };
 
 export type TMatchParams = Partial<IMatch>;
+export type TMatchCreation = Omit<IMatch, 'id'>;
