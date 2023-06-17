@@ -8,7 +8,9 @@ import { app } from '../app';
 
 import matchMock from './mocks/match.mock';
 import userMock from './mocks/user.mock';
+import teamMock from './mocks/team.mock';
 import SequelizeMatch from '../database/models/SequelizeMatch';
+import SequelizeTeam from '../database/models/SequelizeTeam';
 
 chai.use(chaiHttp);
 
@@ -130,31 +132,37 @@ describe('Match integration tests', function() {
           homeTeamGoals: 1,
           awayTeamGoals: 1,
         })
-        .set('Authorization', 'invalid token');
+        .set('Authorization', 'valid token');
 
       expect(status).to.be.equal(200);
       expect(body).to.be.deep.equal(matchMock.match);
     });
 
     it('should return bad request if homeTeamGoals was not sent', async function() {
+      sinon.stub(jwt, 'verify').returns(userMock.user as any);
+
       const { status, body } = await chai
         .request(app)
         .patch('/matches/1')
         .send({
           awayTeamGoals: 1,
-        });
+        })
+        .set('Authorization', 'valid token');
 
       expect(status).to.be.equal(400);
       expect(body).to.be.deep.equal({ message: 'homeTeamGoals is required' });
     });
 
     it('should return bad request if awayTeamGoals was not sent', async function() {
+      sinon.stub(jwt, 'verify').returns(userMock.user as any);
+
       const { status, body } = await chai
         .request(app)
         .patch('/matches/1')
         .send({
           homeTeamGoals: 1,
-        });
+        })
+        .set('Authorization', 'valid token');
 
       expect(status).to.be.equal(400);
       expect(body).to.be.deep.equal({ message: 'awayTeamGoals is required' });
@@ -205,6 +213,156 @@ describe('Match integration tests', function() {
 
       expect(status).to.be.equal(404);
       expect(body).to.be.deep.equal({ message: 'Match not found' });
+    });
+  });
+
+  describe('POST /matches', function () {
+    it('should return the created match', async function() {
+      sinon.stub(jwt, 'verify').returns(userMock.user as any);
+      sinon.stub(SequelizeTeam, 'findAll').resolves(teamMock.sequelizeTeamList as any);
+      sinon.stub(SequelizeMatch, 'create').resolves(matchMock.sequelizeMatch as any);
+
+      const { status, body } = await chai
+        .request(app)
+        .post('/matches')
+        .send({
+          homeTeamId: 1,
+          awayTeamId: 2,
+          homeTeamGoals: 1,
+          awayTeamGoals: 1,
+        })
+        .set('Authorization', 'valid token');
+
+      expect(status).to.be.equal(201);
+      expect(body).to.be.deep.equal(matchMock.match);
+    });
+
+    it('should return with unauthorized if no token was sent', async function() {
+      const { status, body } = await chai
+        .request(app)
+        .post('/matches')
+
+      expect(status).to.be.equal(401);
+      expect(body).to.be.deep.equal({ message: 'Token not found' });
+    });
+
+    it('should return unauthorized if token is invalid', async function() {
+      sinon.stub(jwt, 'verify').throws();
+
+      const { status, body } = await chai
+        .request(app)
+        .post('/matches')
+        .set('Authorization', 'invalid token');
+
+      expect(status).to.be.equal(401);
+      expect(body).to.be.deep.equal({ message: 'Token must be a valid token' });
+    });
+
+    it('should return bad request if homeTeamGoals was not sent', async function() {
+      sinon.stub(jwt, 'verify').returns(userMock.user as any);
+
+      const { status, body } = await chai
+        .request(app)
+        .post('/matches')
+        .send({
+          awayTeamGoals: 1,
+          homeTeamId: 1,
+          awayTeamId: 2,
+        })
+        .set('Authorization', 'valid token');
+
+      expect(status).to.be.equal(400);
+      expect(body).to.be.deep.equal({ message: 'homeTeamGoals is required' });
+    });
+
+    it('should return bad request if awayTeamGoals was not sent', async function() {
+      sinon.stub(jwt, 'verify').returns(userMock.user as any);
+
+      const { status, body } = await chai
+        .request(app)
+        .post('/matches')
+        .send({
+          homeTeamGoals: 1,
+          homeTeamId: 1,
+          awayTeamId: 2,
+        })
+        .set('Authorization', 'valid token');
+
+      expect(status).to.be.equal(400);
+      expect(body).to.be.deep.equal({ message: 'awayTeamGoals is required' });
+    });
+
+    it('should return bad request if homeTeamId was not sent', async function() {
+      sinon.stub(jwt, 'verify').returns(userMock.user as any);
+
+      const { status, body } = await chai
+        .request(app)
+        .post('/matches')
+        .send({
+          homeTeamGoals: 1,
+          awayTeamGoals: 1,
+          awayTeamId: 2,
+        })
+        .set('Authorization', 'valid token');
+
+      expect(status).to.be.equal(400);
+      expect(body).to.be.deep.equal({ message: 'homeTeamId is required' });
+    });
+
+    it('should return bad request if awayTeamId was not sent', async function() {
+      sinon.stub(jwt, 'verify').returns(userMock.user as any);
+
+      const { status, body } = await chai
+        .request(app)
+        .post('/matches')
+        .send({
+          awayTeamGoals: 1,
+          homeTeamId: 1,
+          homeTeamGoals: 1,
+        })
+        .set('Authorization', 'valid token');
+
+      expect(status).to.be.equal(400);
+      expect(body).to.be.deep.equal({ message: 'awayTeamId is required' });
+    });
+
+    it('should return unprocessable content if ids are equal', async function() {
+      sinon.stub(jwt, 'verify').returns(userMock.user as any);
+
+      const { status, body } = await chai
+        .request(app)
+        .post('/matches')
+        .send({
+          homeTeamId: 1,
+          awayTeamId: 1,
+          homeTeamGoals: 1,
+          awayTeamGoals: 1,
+        })
+        .set('Authorization', 'valid token');
+
+      expect(status).to.be.equal(422);
+      expect(body).to.be.deep.equal({
+        message: 'It is not possible to create a match with two equal teams',
+      });
+    });
+
+    it('should return not found content if a invalid id was sent', async function() {
+      sinon.stub(jwt, 'verify').returns(userMock.user as any);
+      sinon.stub(SequelizeTeam, 'findAll').resolves([]);
+
+      const { status, body } = await chai
+        .request(app)
+        .post('/matches')
+        .send({
+          homeTeamId: 9129,
+          awayTeamId: 1,
+          homeTeamGoals: 1,
+          awayTeamGoals: 1,
+        })
+        .set('Authorization', 'valid token');
+
+      expect(status).to.be.equal(404);
+      expect(body).to.be.deep.equal({ message: 'There is no team with such id!' });
     });
   });
 });
