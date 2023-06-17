@@ -1,4 +1,4 @@
-export type ErrorStatus = 'NOT_FOUND' | 'UNAUTHORIZED' | 'INVALID_VALUE';
+export type ErrorStatus = 'NOT_FOUND' | 'UNAUTHORIZED' | 'INVALID_VALUE' | 'UNPROCESSABLE_CONTENT';
 
 type SuccessResponse<T> = {
   status: 'SUCCESS';

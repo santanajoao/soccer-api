@@ -6,6 +6,7 @@ class HTTP {
       case 'NOT_FOUND': return 404;
       case 'UNAUTHORIZED': return 401;
       case 'INVALID_VALUE': return 400;
+      case 'UNPROCESSABLE_CONTENT': return 422;
       default: return 500;
     }
   };
