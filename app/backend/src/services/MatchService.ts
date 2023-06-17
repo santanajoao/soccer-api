@@ -49,6 +49,7 @@ class MatchService implements IMatchService {
   public createMatch = async (fields: IMatch): Promise<ServiceResponse<IMatch>> => {
     const matchValidation = await this.matchValidator
       .validateTeams(fields.homeTeamId, fields.awayTeamId);
+
     if (matchValidation.status !== 'SUCCESS') return matchValidation;
 
     const match = await this.matchModel.create({
