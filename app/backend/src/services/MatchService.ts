@@ -3,12 +3,15 @@ import IMatchService, { TUpdateGoals } from '../Interfaces/matches/IMatchService
 import IMatchModel from '../Interfaces/matches/IMatchModel';
 import IMatch, { TMatchParams, TMatchWithTeamNames } from '../Interfaces/matches/IMatch';
 import DataHandler from '../utils/DataHandler';
+import IMatchValidator from '../Interfaces/matches/IMatchValidator';
 
 class MatchService implements IMatchService {
   private matchModel: IMatchModel;
+  private matchValidator: IMatchValidator;
 
-  constructor(matchModel: IMatchModel) {
+  constructor(matchModel: IMatchModel, matchValidator: IMatchValidator) {
     this.matchModel = matchModel;
+    this.matchValidator = matchValidator;
   }
 
   public getMatches = async (
@@ -44,6 +47,10 @@ class MatchService implements IMatchService {
   };
 
   public createMatch = async (fields: IMatch): Promise<ServiceResponse<IMatch>> => {
+    const matchValidation = await this.matchValidator
+      .validateTeams(fields.homeTeamId, fields.awayTeamId);
+    if (matchValidation.status !== 'SUCCESS') return matchValidation;
+
     const match = await this.matchModel.create({
       homeTeamGoals: fields.homeTeamGoals,
       homeTeamId: fields.homeTeamId,
