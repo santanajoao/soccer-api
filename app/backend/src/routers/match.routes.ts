@@ -25,15 +25,15 @@ router.patch(
 
 router.patch(
   '/:id',
-  middlewares.validateUpdateGoals,
   middlewares.validateToken,
+  middlewares.validateUpdateGoals,
   matchController.handlePatchMatches,
 );
 
 router.post(
   '/',
-  middlewares.validateNewMatch,
   middlewares.validateToken,
+  middlewares.validateNewMatch,
   matchController.handlePostMatch,
 );
 
