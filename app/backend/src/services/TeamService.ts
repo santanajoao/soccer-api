@@ -1,13 +1,16 @@
 import ServiceResponse from '../Interfaces/TServiceResponse';
 import ITeamService from '../Interfaces/teams/ITeamService';
 import ITeamModel from '../Interfaces/teams/ITeamModel';
-import ITeam from '../Interfaces/teams/ITeam';
+import ITeam, { TLeaderboard } from '../Interfaces/teams/ITeam';
+import ITeamDataHandler from '../Interfaces/teams/ITeamDataHandler';
 
 class TeamService implements ITeamService {
   private teamModel: ITeamModel;
+  private dataHandler: ITeamDataHandler;
 
-  constructor(teamModel: ITeamModel) {
+  constructor(teamModel: ITeamModel, dataHandler: ITeamDataHandler) {
     this.teamModel = teamModel;
+    this.dataHandler = dataHandler;
   }
 
   public getAll = async (): Promise<ServiceResponse<ITeam[]>> => {
@@ -22,6 +25,12 @@ class TeamService implements ITeamService {
       return { status: 'NOT_FOUND', data: { message: 'Team not found' } };
     }
     return { status: 'SUCCESS', data: team };
+  };
+
+  public getLeaderboard = async (): Promise<ServiceResponse<TLeaderboard[]>> => {
+    const teams = await this.teamModel.findAllWithMatches();
+    const leaderBoard = this.dataHandler.getLeaderboard(teams);
+    return { status: 'SUCCESS', data: leaderBoard };
   };
 }
 

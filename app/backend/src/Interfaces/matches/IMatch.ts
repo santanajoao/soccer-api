@@ -16,5 +16,10 @@ export type TMatchWithTeamNames = IMatch & {
   awayTeam: TTeamName;
 };
 
+export type TMatchesGoals = {
+  goals: number;
+  opponentGoals: number;
+};
+
 export type TMatchParams = Partial<IMatch>;
 export type TMatchCreation = Omit<IMatch, 'id'>;

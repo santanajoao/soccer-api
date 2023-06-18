@@ -1,6 +1,7 @@
 import { Op } from 'sequelize';
+import SequelizeMatch from '../database/models/SequelizeMatch';
 import ITeamModel from '../Interfaces/teams/ITeamModel';
-import ITeam from '../Interfaces/teams/ITeam';
+import ITeam, { TTeamsWithMatches } from '../Interfaces/teams/ITeam';
 import SequelizeTeam from '../database/models/SequelizeTeam';
 
 class TeamModel implements ITeamModel {
@@ -26,6 +27,17 @@ class TeamModel implements ITeamModel {
     });
 
     const teams = sequelizeTeams.map((team) => team.dataValues);
+    return teams;
+  };
+
+  public findAllWithMatches = async (): Promise<TTeamsWithMatches[]> => {
+    const sequelizeTeams = await this.model.findAll({
+      include: [
+        { model: SequelizeMatch, as: 'homeMatches' },
+        { model: SequelizeMatch, as: 'awayMatches' },
+      ],
+    });
+    const teams = sequelizeTeams.map((team) => team.dataValues) as TTeamsWithMatches[];
     return teams;
   };
 }
