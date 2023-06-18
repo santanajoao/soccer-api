@@ -27,9 +27,9 @@ class TeamService implements ITeamService {
     return { status: 'SUCCESS', data: team };
   };
 
-  public getLeaderboard = async (): Promise<ServiceResponse<TLeaderboard[]>> => {
+  public getLeaderboard = async (teamType: string): Promise<ServiceResponse<TLeaderboard[]>> => {
     const teams = await this.teamModel.findAllWithMatches();
-    const leaderBoard = this.dataHandler.getLeaderboard(teams);
+    const leaderBoard = this.dataHandler.getLeaderboard(teams, teamType);
     return { status: 'SUCCESS', data: leaderBoard };
   };
 }

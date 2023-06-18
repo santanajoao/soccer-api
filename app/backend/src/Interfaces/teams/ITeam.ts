@@ -11,9 +11,9 @@ export type TTeamsWithMatches = ITeam & {
 };
 
 export type TResults = {
-  victories: number;
-  losses: number;
-  draws: number;
+  totalVictories: number;
+  totalLosses: number;
+  totalDraws: number;
   goalsFavor: number;
   goalsOwn: number;
 };
@@ -27,4 +27,6 @@ export type TLeaderboard = {
   totalLosses: number;
   goalsFavor: number;
   goalsOwn: number;
+  efficiency: string;
+  goalsBalance: number;
 };

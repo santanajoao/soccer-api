@@ -12,6 +12,8 @@ const teamModel = new TeamModel();
 const teamService = new TeamService(teamModel, teamDataHandler);
 const teamController = new TeamController(teamService);
 
-router.get('/home', teamController.handleGetLeaderboard);
+router.get('/home', teamController.handleGetHomeLeaderboard);
+router.get('/away', teamController.handleGetAwayLeaderboard);
+router.get('/', teamController.handleGetGeneralLeaderboard);
 
 export default router;

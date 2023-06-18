@@ -33,8 +33,30 @@ class TeamController {
     res.status(200).json(data);
   };
 
-  public handleGetLeaderboard = async (req: Request, res: Response) => {
-    const { status, data } = await this.teamService.getLeaderboard();
+  public handleGetGeneralLeaderboard = async (req: Request, res: Response) => {
+    const { status, data } = await this.teamService.getLeaderboard('all');
+
+    if (status !== 'SUCCESS') {
+      return res
+        .status(this.statusMapper.mapStatus(status))
+        .json(data);
+    }
+    res.status(200).json(data);
+  };
+
+  public handleGetHomeLeaderboard = async (req: Request, res: Response) => {
+    const { status, data } = await this.teamService.getLeaderboard('home');
+
+    if (status !== 'SUCCESS') {
+      return res
+        .status(this.statusMapper.mapStatus(status))
+        .json(data);
+    }
+    res.status(200).json(data);
+  };
+
+  public handleGetAwayLeaderboard = async (req: Request, res: Response) => {
+    const { status, data } = await this.teamService.getLeaderboard('away');
 
     if (status !== 'SUCCESS') {
       return res

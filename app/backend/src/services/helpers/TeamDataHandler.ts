@@ -28,40 +28,71 @@ class TeamDataHandler implements ITeamDataHandler {
       updatedResults.goalsOwn += opponentGoals;
 
       if (goals > opponentGoals) {
-        updatedResults.victories += 1;
+        updatedResults.totalVictories += 1;
       } else if (goals < opponentGoals) {
-        updatedResults.losses += 1;
+        updatedResults.totalLosses += 1;
       } else {
-        updatedResults.draws += 1;
+        updatedResults.totalDraws += 1;
       }
 
       return updatedResults;
-    }, { victories: 0, draws: 0, losses: 0, goalsFavor: 0, goalsOwn: 0 });
+    }, {
+      totalVictories: 0, totalDraws: 0, totalLosses: 0, goalsFavor: 0, goalsOwn: 0,
+    });
 
     return gameResults;
   };
 
-  public getLeaderboard = (teams: TTeamsWithMatches[]): TLeaderboard[] => {
-    const leaderboard = teams.map((team) => {
-      const finishedHomeMatches = team.homeMatches.filter((match) => !match.inProgress);
-      const finishedAwayMatches = team.awayMatches.filter((match) => !match.inProgress);
-      const finishedMatches = this.formatMatches(finishedHomeMatches, finishedAwayMatches);
-      const results = this.getResults(finishedMatches);
-      const points = results.victories * 3 + results.draws;
+  private getEfficiency = (points: number, totalGames: number) => {
+    const efficiency = (points / (totalGames * 3)) * 100;
+    return efficiency.toFixed(2);
+  };
 
+  private getFinishedMatches = (team: TTeamsWithMatches, type: string) => {
+    let finishedHomeMatches: IMatch[] = [];
+    let finishedAwayMatches: IMatch[] = [];
+
+    if (type === 'all' || type === 'home') {
+      finishedHomeMatches = team.homeMatches.filter((match) => !match.inProgress);
+    }
+    if (type === 'all' || type === 'away') {
+      finishedAwayMatches = team.awayMatches.filter((match) => !match.inProgress);
+    }
+
+    const finishedMatches = this.formatMatches(finishedHomeMatches, finishedAwayMatches);
+    return finishedMatches;
+  };
+
+  private sortLeaderboard = (leaderboard: TLeaderboard[]) => {
+    const sorted = leaderboard.sort((a, b) => {
+      const pointsDiff = b.totalPoints - a.totalPoints;
+      if (pointsDiff !== 0) return pointsDiff;
+      const victoriesDiff = b.totalVictories - a.totalVictories;
+      if (victoriesDiff !== 0) return victoriesDiff;
+      const goalsBalanceDiff = b.goalsBalance - a.goalsBalance;
+      if (goalsBalanceDiff !== 0) return goalsBalanceDiff;
+      return b.goalsFavor - a.goalsFavor;
+    });
+    return sorted;
+  };
+
+  public getLeaderboard = (teams: TTeamsWithMatches[], type: string): TLeaderboard[] => {
+    const leaderboard = teams.map((team) => {
+      const finishedMatches = this.getFinishedMatches(team, type);
+      const results = this.getResults(finishedMatches);
+      const points = results.totalVictories * 3 + results.totalDraws;
       return {
         name: team.teamName,
         totalPoints: points,
         totalGames: finishedMatches.length,
-        totalVictories: results.victories,
-        totalDraws: results.draws,
-        totalLosses: results.losses,
+        ...results,
         goalsFavor: results.goalsFavor,
         goalsOwn: results.goalsOwn,
+        goalsBalance: results.goalsFavor - results.goalsOwn,
+        efficiency: this.getEfficiency(points, finishedMatches.length),
       };
     });
-
-    return leaderboard;
+    return this.sortLeaderboard(leaderboard);
   };
 }
 
