@@ -51,10 +51,22 @@ A API permite criar usuários e buscar, criar, atualizar e finalizar partidas. T
   
   <pre><code>
     {
-      "homeTeamId": 16, // O valor deve ser o id do time
-      "awayTeamId": 8, // O valor deve ser o id do time
-      "homeTeamGoals": 2,
+      "homeTeamId": 16,
+      "awayTeamId": 8,
+      "homeTeamGoals": 1,
       "awayTeamGoals": 2,
+    }
+  </code></pre>
+
+  <span>Exemplo de resposta:</span>
+  <pre><code>
+    {
+      "id": 1,
+      "homeTeamId": 16,
+      "homeTeamGoals": 1,
+      "awayTeamId": 8,
+      "awayTeamGoals": 2,
+      "inProgress": true,
     }
   </code></pre>
 </details>
